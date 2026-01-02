@@ -1,0 +1,126 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8"> <!-- קידוד תווים -->
+  <title>Admin Dashboard</title> <!-- כותרת לשונית הדפדפן -->
+  <link rel="stylesheet" href="/style.css"> <!-- קובץ עיצוב גלובלי -->
+  <style>
+    /* פריסת עמוד בסיסית */
+    body {
+      margin: 0; /* איפוס מרווח ברירת מחדל */
+      font-family: Arial, sans-serif; /* סט פונטים */
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* רקע מדורג */
+      display: flex; /* פריסת סרגל צד + אזור ראשי */
+    }
+
+    /* סרגל צד שמאלי */
+    .sidebar {
+      width: 220px; /* רוחב קבוע לסרגל הצד */
+      background-color: #1f1f2e; /* ערכת צבע כהה */
+      color: white; /* צבע טקסט */
+      padding: 20px; /* ריווח פנימי */
+      height: 100vh; /* גובה חלון מלא */
+      position: fixed; /* קיבוע לשמאל */
+      top: 0;
+      left: 0;
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem; /* גודל כותרת אדמין */
+      margin-bottom: 20px; /* רווח מתחת לכותרת */
+    }
+
+    .sidebar ul {
+      list-style-type: none; /* ללא תבליטים */
+      padding: 0; /* הסרת ריווח ברירת מחדל */
+    }
+
+    .sidebar ul li a {
+      display: block; /* אזור לחיץ ברוחב מלא */
+      padding: 10px; /* ריווח פנימי לקישור */
+      margin-bottom: 10px; /* מרווח בין קישורים */
+      text-decoration: none; /* ללא קו תחתון */
+      color: white; /* צבע הקישור */
+      border-radius: 5px; /* פינות מעוגלות */
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #3e3e5e; /* מצב ריחוף */
+    }
+
+    /* אזור התוכן הראשי (מימין) */
+    .main {
+      margin-left: 240px; /* מקום לסרגל הצד */
+      padding: 40px; /* ריווח העמוד */
+      flex: 1; /* תופס את שאר הרוחב */
+      color: white; /* צבע טקסט */
+    }
+
+    /* עיצוב טבלת משתמשים */
+    table {
+      width: 100%; /* טבלה ברוחב מלא */
+      border-collapse: collapse; /* איחוד גבולות */
+      background-color: rgba(255, 255, 255, 0.05); /* רקע שקוף קלות */
+    }
+
+    th, td {
+      padding: 12px; /* ריווח בתאים */
+      border: 1px solid #ccc; /* גבול לתא */
+      text-align: center; /* יישור מרכזי */
+    }
+
+    th {
+      background-color: #00c6ff; /* רקע כותרות */
+      color: black; /* צבע טקסט לכותרת */
+    }
+
+    tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.02); /* פסים מתחלפים */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ניווט בסרגל הצד -->
+  <div class="sidebar">
+    <h2>👑 Admin: <%= username %></h2> <!-- הצגת שם האדמין הנוכחי -->
+    <ul>
+      <li><a href="/admin/dashboard">👥 Users Overview</a></li> <!-- רשימת משתמשים -->
+      <li><a href="/admin/results">📦 All Results</a></li>  <!-- כל הריצות המעובדות -->
+      <li><a href="/admin/settings">⚙️ Settings</a></li> <!-- הגדרות אדמין -->
+      <li><a href="/logout">🚪 Logout</a></li> <!-- יציאה -->
+    </ul>
+  </div>
+
+  <!-- תוכן ראשי -->
+  <div class="main">
+    <h1>👥 Users Overview</h1> <!-- כותרת העמוד -->
+
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Factory ID</th>
+          <th>Email</th>
+          <th>Fax Number</th>
+          <th>Role</th>
+          <th>Last Login</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(user => { %> <!-- לולאה על מערך המשתמשים -->
+          <tr>
+            <td><%= user.username %></td> <!-- שם משתמש -->
+            <td><%= user.factoryID %></td> <!-- מזהה מפעל (תמיכת מפתח legacy) -->
+            <td><%= user.email %></td> <!-- אימייל -->
+            <td><%= user.faxNumber %></td> <!-- פקס (יכול להיות "—") -->
+            <td><%= user.role %></td> <!-- תפקיד: admin/user -->
+            <td><%= user.last_login || 'N/A' %></td> <!-- התחברות אחרונה או N/A -->
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

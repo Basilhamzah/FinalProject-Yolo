@@ -1,0 +1,248 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8" /> <!-- Character encoding -->
+  <title>All Detection Results</title> <!-- Page title -->
+  <link rel="stylesheet" href="/style.css" /> <!-- Global stylesheet -->
+  <style>
+    :root{
+      --bg:#0f2027; --bg2:#203a43; --bg3:#2c5364;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(255,255,255,.08);
+      --line:#3bb1ff; --text:#ffffff; --muted:rgba(255,255,255,.8);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--text);background:linear-gradient(135deg,var(--bg),var(--bg2),var(--bg3));display:flex;min-height:100vh}
+    .sidebar{width:220px;background:#1f1f2e;padding:20px;position:fixed;inset:0 auto 0 0} /* Fixed left sidebar */
+    .sidebar h2{font-size:1.15rem;margin:0 0 16px}
+    .sidebar ul{list-style:none;margin:0;padding:0}
+    .sidebar a{display:block;color:#fff;text-decoration:none;padding:10px;border-radius:8px;margin-bottom:8px}
+    .sidebar a:hover{background:#31314b}
+
+    .main{margin-left:240px;flex:1;padding:28px} /* Main area shifted to the right of sidebar */
+    .container{max-width:1200px;margin:0 auto} /* Centered content width */
+    .page-title{display:flex;align-items:center;gap:10px;font-size:28px;font-weight:700;margin:0 0 10px}
+    .divider{height:2px;background:var(--line);opacity:.6;margin:10px 0 22px;border-radius:2px}
+
+    /* Card wrapper for filters block */
+    .card{background:var(--panel);border-radius:14px;padding:14px 16px;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+
+    .toolbar input,
+    .toolbar .btn {
+      height: 38px;
+    }
+
+    .toolbar .lbl{opacity:.9;font-size:14px;margin:0 6px}
+    .btn{background:linear-gradient(90deg,#00c6ff,#1eba7e);color:#fff;font-weight:700;cursor:pointer;border:none;border-radius:10px;padding:9px 12px;font-size:14px;height:38px}
+    .btn.secondary{background:#475569}
+    #exportCsv[disabled]{opacity:.6;cursor:not-allowed}
+
+    /* Remove gray background inside date inputs */
+    .toolbar input[type="date"]{
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 10px;
+      padding: 8px 36px 8px 10px;
+      height: 38px;
+      font-size: 14px;
+    }
+    .toolbar input[type="date"]::-webkit-datetime-edit,
+    .toolbar input[type="date"]::-webkit-datetime-edit-text,
+    .toolbar input[type="date"]::-webkit-datetime-edit-fields-wrapper,
+    .toolbar input[type="date"]::-webkit-date-and-time-value{
+      background: transparent !important;
+    }
+    .toolbar input[type="date"]::-webkit-calendar-picker-indicator{
+      background: transparent !important;
+      filter: invert(1);
+      opacity: .9;
+      cursor: pointer;
+    }
+    .toolbar input[type="date"]:focus{
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,198,255,.25);
+      border-color: rgba(0,198,255,.45);
+    }
+    .toolbar input[type="date"]::-moz-calendar-picker-indicator{
+      background: transparent !important;
+      filter: invert(1);
+      opacity: .9;
+    }
+
+    /* Results table styles */
+    .table-wrap{margin-top:16px;background:var(--panel2);border-radius:12px;overflow:auto;max-height:70vh}
+    table{width:100%;border-collapse:collapse;min-width:900px}
+    thead th{position:sticky;top:0;background:rgba(0,198,255,.25);border-bottom:1px solid rgba(255,255,255,.2)}
+    th,td{padding:12px 10px;text-align:center;border-bottom:1px solid rgba(255,255,255,.12)}
+    tbody tr:hover{background:rgba(255,255,255,.06)}
+    .muted{opacity:.9}
+    .badge{padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15)}
+    .link{color:#61dafb;text-decoration:underline}
+    .empty{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:36px;color:var(--muted)}
+
+    .w-username{width:220px}
+    .w-factory{width:180px}
+    .w-date{width:170px}
+
+    @media (max-width:960px){
+      .main{margin-left:0;padding:18px} /* Stack layout on small screens */
+      .sidebar{position:static;width:100%;height:auto;border-bottom:1px solid rgba(255,255,255,.1)}
+      .toolbar{gap:8px}
+      .w-username,.w-factory,.w-date{width:100%}
+      .btn{flex:1}
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <h2>👑 Admin: <%= username %></h2> <!-- Display logged-in admin -->
+    <ul>
+      <li><a href="/admin/dashboard">👥 Users Overview</a></li> <!-- Users list -->
+      <li><a href="/admin/results">📦 All Results</a></li> <!-- All detection results -->
+      <li><a href="/admin/settings">⚙️ Settings</a></li> <!-- Admin settings -->
+      <li><a href="/logout">🚪 Logout</a></li> <!-- Sign out -->
+    </ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="container">
+      <h1 class="page-title">📦 All Detection Results</h1> <!-- Page title -->
+      <div class="divider"></div> <!-- Decorative divider -->
+
+      <!-- Filters -->
+        <div class="toolbar"> <!-- Filters toolbar: username/factory/date range -->
+          <input id="fUser" class="w-username" placeholder="Filter by username" />
+          <input id="fFactory" class="w-factory" placeholder="Filter by factory id" />
+          <span class="lbl">From</span>
+          <input id="fFrom" class="w-date" type="date" />
+          <span class="lbl">To</span>
+          <input id="fTo" class="w-date" type="date" />
+          <button id="apply" class="btn">Apply</button> <!-- Apply filters -->
+          <button id="reset" class="btn secondary">Reset</button> <!-- Clear filters -->
+        </div>
+      </section> <!-- Note: closing tag kept exactly as provided -->
+
+      <!-- Table -->
+      <section class="table-wrap"> <!-- Scrollable table wrapper -->
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Date</th>
+              <th>Username</th>
+              <th>Factory</th>
+              <th>Tomato OK</th>
+              <th>Tomato Defect</th>
+              <th>Pea OK</th>
+              <th>Pea Defect</th>
+              <th>Video</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (results && results.length) { %> <!-- Only render rows when results exist -->
+              <% results.slice().reverse().forEach((r) => { %> <!-- Reverse for newest first -->
+                <tr
+                  data-username="<%= (r.username || '').toLowerCase() %>"
+                  data-factory="<%= (r.factory_id || '').toLowerCase() %>"
+                  data-date="<%= r.createdAt %>"
+                >
+                  <td class="idx"></td> <!-- Row index (filled by JS) -->
+                  <td class="muted"><%= new Date(r.createdAt).toLocaleString() %></td> <!-- Localized timestamp -->
+                  <td><span class="badge"><%= r.username || '—' %></span></td> <!-- Username badge -->
+                  <td><span class="badge"><%= r.factory_id || '—' %></span></td> <!-- Factory badge -->
+                  <td><%= r.counts?.tomato_ok ?? 0 %></td> <!-- Tomato OK count -->
+                  <td><%= r.counts?.tomato_defect ?? 0 %></td> <!-- Tomato defect count -->
+                  <td><%= r.counts?.pea_ok ?? 0 %></td> <!-- Pea OK count -->
+                  <td><%= r.counts?.pea_defect ?? 0 %></td> <!-- Pea defect count -->
+                  <td><a class="link" href="<%= r.video %>" target="_blank">View</a></td> <!-- Link to processed video -->
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr class="empty-row"><td colspan="9">
+                <div class="empty">
+                  <div>No results</div> <!-- Empty state -->
+                </div>
+              </td></tr>
+            <% } %>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <!-- JS -->
+  <script>
+    (function () {
+      const tbody = document.querySelector('#tbl tbody'); /* Table body reference */
+      const rows = Array.from(tbody.querySelectorAll('tr')).filter(r=>!r.classList.contains('empty-row')); /* Data rows only */
+      const fUser = document.getElementById('fUser'); /* Username filter input */
+      const fFactory = document.getElementById('fFactory'); /* Factory filter input */
+      const fFrom = document.getElementById('fFrom'); /* From date input */
+      const fTo = document.getElementById('fTo'); /* To date input */
+      const btnApply = document.getElementById('apply'); /* Apply button */
+      const btnReset = document.getElementById('reset'); /* Reset button */
+
+      function visible(tr){ return tr.style.display !== 'none'; } /* Check if row is visible */
+
+      function applyFilters(){
+        const u = (fUser.value||'').toLowerCase();
+        const f = (fFactory.value||'').toLowerCase();
+        const from = fFrom.value ? new Date(fFrom.value) : null;
+        const to = fTo.value ? new Date(fTo.value) : null;
+
+        rows.forEach(tr=>{
+          const ru = tr.dataset.username || '';
+          const rf = tr.dataset.factory || '';
+          const rd = tr.dataset.date ? new Date(tr.dataset.date) : null;
+          let ok = true;
+          if (u && !ru.includes(u)) ok = false; /* Username filter */
+          if (f && !rf.includes(f)) ok = false; /* Factory filter */
+          if (from && rd && rd < from) ok = false; /* From date filter */
+          if (to && rd && rd > new Date(to.getFullYear(), to.getMonth(), to.getDate(), 23, 59, 59)) ok = false; /* To date filter (end of day) */
+          tr.style.display = ok ? '' : 'none';
+        });
+
+        reindex();
+      }
+
+      function resetFilters(){
+        fUser.value=''; fFactory.value=''; fFrom.value=''; fTo.value='';
+        rows.forEach(tr=>tr.style.display=''); /* Show all rows */
+        reindex();
+      }
+
+      function reindex(){
+        let i=1;
+        rows.forEach(tr=>{
+          if(visible(tr)){
+            const c = tr.querySelector('.idx');
+            if(c){ c.textContent = i++; } /* Set sequential index for visible rows */
+          }
+        });
+      }
+
+      [fUser, fFactory, fFrom, fTo].forEach(inp=>{
+        inp.addEventListener('keydown', (e)=>{
+          if (e.key === 'Enter') { e.preventDefault(); applyFilters(); } /* Apply on Enter key */
+        });
+      });
+
+      reindex(); /* Initial numbering */
+      btnApply.addEventListener('click', applyFilters); /* Apply filters click */
+      btnReset.addEventListener('click', resetFilters); /* Reset filters click */
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html> <!-- HTML5 document type -->
+<html lang="en"> <!-- Document language -->
+<head>
+  <meta charset="UTF-8"> <!-- Character encoding -->
+  <title>Defect Detection</title> <!-- Browser tab title -->
+  <link rel="stylesheet" href="/style.css"> <!-- Global stylesheet served from /public -->
+
+  <style>
+    /* Base page layout styles */
+    body {
+      margin: 0; /* Remove default margin */
+      font-family: Arial, sans-serif; /* Font stack */
+      display: flex; /* Horizontal layout: sidebar + main */
+    }
+
+    /* Left sidebar container */
+    .sidebar {
+      width: 200px; /* Sidebar width */
+      background-color: #1f1f2e; /* Dark background */
+      color: white; /* Sidebar text color */
+      height: 100vh; /* Full viewport height */
+      padding: 20px; /* Inner spacing */
+      position: fixed; /* Stick to left edge */
+      top: 0; /* Align to top */
+      left: 0; /* Align to left */
+    }
+
+    .sidebar h2 {
+      margin-top: 0; /* Remove top margin */
+      font-size: 1.2rem; /* Sidebar heading size */
+    }
+
+    .sidebar ul {
+      list-style: none; /* Remove bullets */
+      padding: 0; /* Remove default padding */
+    }
+
+    .sidebar ul li {
+      margin-bottom: 15px; /* Space between menu items */
+    }
+
+    .sidebar ul li a {
+      color: white; /* Link color in sidebar */
+      text-decoration: none; /* No underline */
+      display: block; /* Full-width clickable area */
+      padding: 8px; /* Inner spacing for link */
+      border-radius: 4px; /* Rounded corners */
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #3e3e5e; /* Hover background */
+    }
+
+    /* Main content area (to the right of sidebar) */
+    .main {
+      margin-left: 220px; /* Make room for the fixed sidebar */
+      padding: 40px; /* Page padding */
+      flex: 1; /* Take remaining horizontal space */
+    }
+
+    /* Upload form wrapper spacing */
+    #uploadForm {
+      margin-bottom: 30px; /* Space below form */
+    }
+
+    /* Logout area styling (if used elsewhere) */
+    .logout {
+      margin-top: 40px; /* Space above logout section */
+    }
+
+    .logout a {
+      color: white; /* Logout link color */
+      text-decoration: underline; /* Underline for emphasis */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar navigation and greeting -->
+  <div class="sidebar">
+    <h2>👋 Hello ,<%= req.session.username %></h2> <!-- Show current logged-in username -->
+    <ul>
+      <li><a href="/">📤 Upload Video</a></li> <!-- Link to upload page -->
+      <li><a href="/user/dashboard">📊 Results Dashboard</a></li> <!-- Link to personal dashboard -->
+      <li><a class="active" href="/user/results">✍🏻 User Results</a></li> <!-- Link to user results history -->
+      <li><a href="/logout">🚪 Logout</a></li> <!-- End session and redirect to login -->
+    </ul>
+  </div>
+
+  <!-- Main Content area -->
+  <div class="main">
+    <h2>🎥 Upload a Video for Defect Detection</h2> <!-- Page heading -->
+
+    <div class="form-wrapper"> <!-- Container for upload form -->
+      <!-- Form with direct POST to /upload -->
+      <form id="uploadForm" action="/upload" method="POST" enctype="multipart/form-data"> <!-- Multipart for file upload -->
+        <input type="file" id="videoFile" name="video" accept="video/*" required> <!-- Select a video file (required) -->
+        <button type="submit">Detect</button> <!-- Submit to start processing -->
+      </form>
+
+      <p class="hint">
+        After uploading, you will be redirected to the dashboard to view your results <!-- UX hint about post-upload flow -->
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

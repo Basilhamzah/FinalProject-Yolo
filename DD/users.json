@@ -1,0 +1,28 @@
+[
+  {
+    "username": "Admin",
+    "password": "$2b$10$vMeK90PziUYfxArgjAskzONMdnnkDm8fhFYQ9sCjYcdNXZ2ur9AES",
+    "role": "admin",
+    "last_login": "2025-11-05T17:02:03.794Z"
+  },
+  {
+    "factory_id": "1",
+    "factoryID": "1",
+    "email": "Basil.hamzah.99@gmail.com",
+    "faxNumber": "0773631997",
+    "username": "Basil",
+    "password": "$2b$10$NirjaerToSPCmUUsQpUWIu8.JBapNX6PFdi4oH4iFIFexfKBm7z8y",
+    "role": "user",
+    "last_login": "2025-11-05T16:28:07.577Z"
+  },
+  {
+    "factory_id": "TEST",
+    "factoryID": "TEST",
+    "email": "TEST",
+    "faxNumber": "TEST",
+    "username": "TEST",
+    "password": "$2b$10$6gFLh0xDLdYgdef0bmvgsuUzO1YB.gY76lzFF8tW01OOjYzsx4MzS",
+    "role": "user",
+    "last_login": null
+  }
+]

@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1755970328312,
+    "createdAt": "2025-08-23T17:32:08.312Z",
+    "username": "basil",
+    "factory_id": "1",
+    "video": "/temp_results/processed_final.mp4",
+    "video_name": "peatomato.mp4",
+    "counts": {
+      "pea_ok": 2,
+      "pea_defect": 2,
+      "tomato_ok": 2,
+      "tomato_defect": 2
+    }
+  },
+  {
+    "id": 1756037287374,
+    "createdAt": "2025-08-24T12:08:07.374Z",
+    "username": "basil",
+    "factory_id": "1",
+    "video": "/temp_results/processed_final.mp4",
+    "video_name": "test2.mp4",
+    "counts": {
+      "pea_ok": 1,
+      "pea_defect": 1,
+      "tomato_ok": 1,
+      "tomato_defect": 1
+    }
+  },
+  {
+    "id": 1762359440539,
+    "createdAt": "2025-11-05T16:17:20.539Z",
+    "username": "Basil",
+    "factory_id": "1",
+    "video": "/temp_results/processed_final.mp4",
+    "video_name": "peatomato.mp4",
+    "counts": {
+      "pea_ok": 2,
+      "pea_defect": 2,
+      "tomato_ok": 2,
+      "tomato_defect": 2
+    }
+  },
+  {
+    "id": 1762360146431,
+    "createdAt": "2025-11-05T16:29:06.431Z",
+    "username": "Basil",
+    "factory_id": "1",
+    "video": "/temp_results/processed_final.mp4",
+    "video_name": "peatomato.mp4",
+    "counts": {
+      "pea_ok": 2,
+      "pea_defect": 2,
+      "tomato_ok": 2,
+      "tomato_defect": 2
+    }
+  }
+]

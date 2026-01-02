@@ -1,0 +1,163 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8"> <!-- שימוש בקידוד תווים UTF-8 -->
+  <title>User Dashboard</title> <!-- כותרת הלשונית בדפדפן -->
+  <link rel="stylesheet" href="/style.css"> <!-- קובץ עיצוב גלובלי מתוך ‎/public -->
+  <style>
+    /* סגנונות בסיס לעמוד (מוטמעים לתצוגה זו) */
+    body {
+      margin: 0; /* הסרת מרווח ברירת מחדל של body */
+      font-family: Arial, sans-serif; /* ערכת פונטים */
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); /* רקע מדורג */
+      display: flex; /* פריסה: סרגל צד + אזור ראשי זה לצד זה */
+    }
+
+    /* סרגל צד שמאלי */
+    .sidebar {
+      width: 220px; /* רוחב הסרגל */
+      background-color: #1f1f2e; /* צבע רקע כהה */
+      color: white; /* צבע טקסט בסרגל */
+      padding: 20px; /* ריווח פנימי */
+      height: 100vh; /* גובה מלא של חלון התצוגה */
+      position: fixed; /* קיבוע בשמאל */
+      top: 0; /* מהחלק העליון */
+      left: 0; /* מהשמאל */
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem; /* גודל כותרת שם המשתמש */
+      margin-bottom: 20px; /* ריווח מתחת לכותרת */
+    }
+
+    .sidebar ul {
+      list-style-type: none; /* הסרת תבליטים */
+      padding: 0; /* הסרת ריווח ברירת מחדל */
+    }
+
+    .sidebar ul li a {
+      display: block; /* הפיכת קישורים לבלוק (רוחב מלא) */
+      padding: 10px; /* ריווח פנימי לקישורים */
+      margin-bottom: 10px; /* מרווח בין קישורים */
+      text-decoration: none; /* ללא קו תחתון */
+      color: white; /* צבע טקסט בקישורים */
+      border-radius: 5px; /* פינות מעוגלות */
+    }
+
+    .sidebar ul li a:hover {
+      background-color: #3e3e5e; /* רקע במעבר עכבר על קישורים */
+    }
+
+    /* מעטפת התוכן הראשי (מימין לסרגל הצד) */
+    .main {
+      margin-left: 240px; /* להשאיר מקום לסרגל הצד */
+      padding: 40px; /* ריווח פנימי */
+      flex: 1; /* לתפוס את יתר הרוחב האופקי */
+      color: white; /* צבע טקסט באזור הראשי */
+    }
+
+    /* מכולת כרטיסים (מספרי סיכום) */
+    .cards {
+      display: flex; /* פריסה אופקית לכרטיסים */
+      justify-content: center; /* מרכוז הכרטיסים אופקית */
+      gap: 20px; /* מרווח בין כרטיסים */
+      flex-wrap: wrap; /* גלישה במסכים קטנים */
+      margin-top: 30px; /* מרווח מעל הכרטיסים */
+    }
+
+    /* סגנון כרטיס בודד */
+    .card {
+      background-color: #fff; /* צבע רקע כרטיס */
+      border-radius: 10px; /* פינות מעוגלות */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* צל נופל */
+      padding: 20px; /* ריווח פנימי */
+      width: 200px; /* רוחב קבוע לכרטיס */
+      text-align: center; /* מרכוז הטקסט */
+      color: #1f1f2e; /* צבע טקסט של הכרטיס */
+    }
+
+    /* צבעי מסגרת עליונה לפי סוג כרטיס */
+    .card.green { border-top: 4px solid green; }   /* עגבניות תקינות */
+    .card.red { border-top: 4px solid red; }       /* עגבניות פגומות */
+    .card.teal { border-top: 4px solid teal; }     /* אפונים תקינים */
+    .card.orange { border-top: 4px solid orange; } /* אפונים פגומים */
+
+    .card p.count {
+      font-size: 2em; /* מספר גדול */
+      font-weight: bold; /* הדגשת המספר */
+      margin: 0; /* ללא שוליים */
+    }
+
+    /* אזור קישור יציאה מתחת לסרגל (לא בשימוש כאן בתוכן הראשי) */
+    .logout {
+      margin-top: 40px; /* ריווח מעל אזור היציאה */
+    }
+
+    .logout a {
+      color: white; /* צבע קישור היציאה */
+      text-decoration: underline; /* קו תחתון להדגשה */
+    }
+
+    /* מכולת וידאו מעובד */
+    .video-container {
+      margin-top: 40px; /* ריווח מעל מקטע הווידאו */
+    }
+
+    .video-container video {
+      border: 3px solid white; /* מסגרת לבנה סביב הווידאו */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- סרגל צד: ניווט וברכת משתמש -->
+  <div class="sidebar"> <!-- ניווט צד שמאל וברכה -->
+    <h2>👤 Hello ,<%= username %></h2> <!-- הצגת שם המשתמש הנוכחי מסשן השרת -->
+    <ul>
+      <li><a href="/">📤 Upload Video</a></li> <!-- קישור לעמוד העלאה -->
+      <li><a href="/user/dashboard">📊 Results Dashboard</a></li> <!-- קישור לעמוד הנוכחי -->
+      <li><a class="active" href="/user/results">✍🏻 User Results</a></li> <!-- קישור להיסטוריית תוצאות המשתמש -->
+
+      <li><a href="/logout">🚪 Logout</a></li> <!-- פעולת יציאה -->
+    </ul>
+  </div>
+
+  <!-- תוכן ראשי -->
+  <div class="main"> <!-- אזור התוכן הימני -->
+    <h1>📦 Your Detection Results</h1> <!-- כותרת העמוד -->
+
+    <div class="cards"> <!-- כרטיסי KPI לסיכום -->
+      <div class="card green"> <!-- מספר עגבניות תקינות -->
+        <p class="count"><%= counts.tomato_ok %></p> <!-- כמות עגבניות תקינות -->
+        <p>Tomato OK</p> <!-- תווית -->
+      </div>
+      <div class="card red"> <!-- מספר עגבניות פגומות -->
+        <p class="count"><%= counts.tomato_defect %></p> <!-- כמות עגבניות פגומות -->
+        <p>Tomato Defect</p> <!-- תווית -->
+      </div>
+      <div class="card teal"> <!-- מספר אפונים תקינים -->
+        <p class="count"><%= counts.pea_ok %></p> <!-- כמות אפונים תקינים -->
+        <p>Pea OK</p> <!-- תווית -->
+      </div>
+      <div class="card orange"> <!-- מספר אפונים פגומים -->
+        <p class="count"><%= counts.pea_defect %></p> <!-- כמות אפונים פגומים -->
+        <p>Pea Defect</p> <!-- תווית -->
+      </div>
+    </div>
+
+    <!-- הצגת וידאו מעובד אם זמין -->
+    <% if (videoPath) { %> <!-- תנאי בצד השרת: מציגים וידאו רק אם קיים נתיב -->
+      <div class="video-container"> <!-- מעטפת וידאו מעובד -->
+        <h2>🎥 Processed Video</h2> <!-- כותרת המקטע -->
+        <div style="text-align: center; margin-top: 20px;"> <!-- מרכוז הווידאו -->
+          <video controls width="640" height="360" autoplay muted> <!-- נגן וידאו HTML5 -->
+            <source src="<%= videoPath %>" type="video/mp4"> <!-- ניגון MP4 מעובד מהשרת -->
+            Your browser does not support the video tag. <!-- הודעת נפילה לדפדפנים ישנים -->
+          </video>
+        </div>
+      </div>
+    <% } %> <!-- סיום תנאי videoPath -->
+  </div>
+
+</body>
+</html>
