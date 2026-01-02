@@ -1,0 +1,5 @@
+train: C:/Users/97252/PycharmProjects/moha/yachin_project/dataset/images/train
+val: C:/Users/97252/PycharmProjects/moha/yachin_project/dataset/images/val
+
+nc: 4
+names: ['pea_defect', 'pea_ok', 'tomato_defect', 'tomato_ok']

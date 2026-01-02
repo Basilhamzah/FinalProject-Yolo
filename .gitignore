@@ -1,0 +1,8 @@
+﻿yolovenv/
+venv/
+__pycache__/
+runs/
+*.pt
+.idea/
+videos/
+*.db
